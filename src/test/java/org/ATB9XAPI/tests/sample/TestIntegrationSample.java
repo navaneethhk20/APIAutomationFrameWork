@@ -1,4 +1,4 @@
-package org.ATB9XAPI.tests.tests.sample;
+package org.ATB9XAPI.tests.sample;
 
 import io.qameta.allure.Description;
 import io.qameta.allure.Owner;

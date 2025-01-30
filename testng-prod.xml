@@ -4,17 +4,11 @@
     <test verbose="2" preserve-order="true" name="C:/Users/Navaneeth H K/IdeaProjects/APIAutomationFrameWork">
         <groups>
             <run>
-                <include name="qa"/>
+                <include name="prod"/>
             </run>
         </groups>
         <classes>
             <class name="org.ATB9XAPI.tests.sample.TestIntegrationSample">
-            <methods>
-                <include name="test1"/>
-                <include name="test2"/>
-                <include name="test3"/>
-                <include name="test4"/>
-            </methods>
             </class>
         </classes>
     </test>
