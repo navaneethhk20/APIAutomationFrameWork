@@ -77,5 +77,9 @@ public class TestIntegrationFlow extends BaseTests {
         assertThat(booking.getFirstname()).isEqualTo("James");
 
     }
-
+    @Test(groups = "qa", priority = 3)
+    @Owner("Navaneeth")
+    @Description("TC-3: Verify Booking is created")
+    public void testUpdateBooking(ITestContext iTestContext) {
+    }
 }
