@@ -60,7 +60,7 @@ public class TestIntegrationFlow extends BaseTests {
         Integer bookingid = (Integer) iTestContext.getAttribute("bookingid");
 
         // GET Request - to verify that the firstname after creation is James
-        String basePathGET = APIEndPoints.CREATE_UPDATE_BOOKING_URL +"/"+bookingid;
+        String basePathGET = APIEndPoints.CREATE_UPDATE_BOOKING_URL + "/" + bookingid;
         System.out.println(basePathGET);
 
         requestSpecification.basePath(basePathGET);
@@ -77,9 +77,51 @@ public class TestIntegrationFlow extends BaseTests {
         assertThat(booking.getFirstname()).isEqualTo("James");
 
     }
+
     @Test(groups = "qa", priority = 3)
     @Owner("Navaneeth")
-    @Description("TC-3: Verify Booking is created")
-    public void testUpdateBooking(ITestContext iTestContext) {
+    @Description("TC-3: Verify Update Booking")
+    public void testUpdateBookingByID(ITestContext iTestContext) {
+        Integer bookingid = (Integer) iTestContext.getAttribute("bookingid");
+        String token = getToken();
+        iTestContext.setAttribute("token", token);
+
+        String basePathPUTPATCH = APIEndPoints.CREATE_UPDATE_BOOKING_URL + "/" + bookingid;
+        System.out.println(basePathPUTPATCH);
+
+        requestSpecification.basePath(basePathPUTPATCH);
+
+        response = RestAssured
+                .given(requestSpecification).cookie("token", token)
+                .when().body(payLoadManager.fullUpdatePayloadAsString()).put();
+
+
+        validatableResponse = response.then().log().all();
+        // Validatable Assertion
+        validatableResponse.statusCode(200);
+
+        Booking booking = payLoadManager.getResponseFromJSON(response.asString());
+
+        assertThat(booking.getFirstname()).isNotNull().isNotBlank();
+        assertThat(booking.getFirstname()).isEqualTo("Pramod");
+        assertThat(booking.getLastname()).isEqualTo("Dutta");
+
+    }
+
+    @Test(groups = "qa", priority = 4)
+    @Owner("Navaneeth")
+    @Description("TC-4: Verify Delete booking")
+    public void testDelete(ITestContext iTestContext) {
+        Integer bookingid = (Integer) iTestContext.getAttribute("bookingid");
+        String token = (String) iTestContext.getAttribute("token");
+
+
+        String basePathDelete = APIEndPoints.CREATE_UPDATE_BOOKING_URL + "/" +bookingid;
+
+        requestSpecification.basePath(basePathDelete).cookie("token", token);
+        validatableResponse = RestAssured.given().spec(requestSpecification)
+                .when().delete().then().log().all();
+        validatableResponse.statusCode(201);
+
     }
 }

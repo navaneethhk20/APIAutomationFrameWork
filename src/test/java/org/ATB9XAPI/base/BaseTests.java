@@ -1,6 +1,7 @@
 package org.ATB9XAPI.base;
 
 import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -23,16 +24,34 @@ public class BaseTests {
     public void setup() {
         payLoadManager = new PayLoadManager();
         assertActions = new AssertActions();
+
+//        requestSpecification = RestAssured
+//                .given()
+//                .baseUri(APIEndPoints.BASE_URL)
+//                .contentType(ContentType.JSON)
+//                .log().all();
+
+        requestSpecification = new RequestSpecBuilder()
+                .setBaseUri(APIEndPoints.BASE_URL)
+                .addHeader("Content-Type", "application/json")
+                .build().log().all();
+
+    }
+
+    public String getToken() {
         requestSpecification = RestAssured
                 .given()
                 .baseUri(APIEndPoints.BASE_URL)
-                .contentType(ContentType.JSON)
-                .log().all();
+                .basePath(APIEndPoints.AUTH_URL);
+        //setting the payload
+        String payload = payLoadManager.setAuthPayLoad();
 
-//        requestSpecification = new RequestSpecBuilder()
-//                .setBaseUri(APIConstants.BASE_URL)
-//                .addHeader("Content-Type", "application/json")
-//                .build().log().all();
+        // Get the Token
+        response = requestSpecification.contentType(ContentType.JSON).body(payload).when().post();
+        // String Extraction
+        String token = payLoadManager.getTokenFromJSON(response.asString());
+
+        return token;
 
     }
     }

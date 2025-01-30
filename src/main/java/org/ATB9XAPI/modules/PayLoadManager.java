@@ -1,9 +1,7 @@
 package org.ATB9XAPI.modules;
 
 import com.google.gson.Gson;
-import org.ATB9XAPI.pojos.Booking;
-import org.ATB9XAPI.pojos.BookingResponse;
-import org.ATB9XAPI.pojos.Bookingdates;
+import org.ATB9XAPI.pojos.*;
 
 public class PayLoadManager {
 
@@ -43,6 +41,42 @@ public class PayLoadManager {
         gson = new Gson();
         Booking booking = gson.fromJson(getResponse, Booking.class);
         return booking;
+
+    }
+    //---Token---
+//Java to json
+    public String setAuthPayLoad() {
+        Auth auth = new Auth();
+        auth.setUsername("admin");
+        auth.setPassword("password123");
+        gson = new Gson();
+        String jsonPayLoadString = gson.toJson(auth);
+        System.out.println("Payload set to the ->" +jsonPayLoadString);
+        return jsonPayLoadString;
+
+    }
+    //json to java
+    public String getTokenFromJSON(String tokenResponse){
+        gson = new Gson();
+        TokenResponse tokenResponse1 = gson.fromJson(tokenResponse, TokenResponse.class);
+        return tokenResponse1.getToken();
+    }
+
+    //PUT REQUEST FOR UPDATE
+    public String fullUpdatePayloadAsString() {
+        Booking booking = new Booking();
+        booking.setFirstname("Pramod");
+        booking.setLastname("Dutta");
+        booking.setTotalprice(112);
+        booking.setDepositpaid(true);
+
+        Bookingdates bookingdates = new Bookingdates();
+        bookingdates.setCheckin("2024-02-01");
+        bookingdates.setCheckout("2024-02-05");
+        booking.setBookingdates(bookingdates);
+        booking.setAdditionalneeds("Breakfast");
+        return gson.toJson(booking);
+
 
     }
 }
